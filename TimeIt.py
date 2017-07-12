@@ -4,26 +4,40 @@
 #for multiple runtimes
 #This program comes with a licence. Please respect it
 
+
+#Imports
 import argparse
 from time import time
 import subprocess
 
-iterations = 10
-command = "python primeNumberTest.py"
-
+#computes an average based on the current average
 def getAverageTime(currentAverage, newValue, totalNumOfValues):
 	temp = currentAverage * (totalNumOfValues - 1)
 	temp += newValue
 	return (temp / totalNumOfValues)
-	
+
+#calls the bash shell and enters a command
+###WARNING DO NOT PUT ANYTHING DANGEROUS IN IT. YOUR SYSTEM WILL GET MESSED
+###UP IF YOU ARE NOT CAREFUL
 def callBashCommand(myCommand):
 	commandsList = myCommand.split()
 	subprocess.call(commandsList)
 
 
-#TODO add args parser
+#Main method for connecting other methods
 def main():
 	count = 1
+	parser = argparse.ArgumentParser(description="Times the runtime of a process")
+	parser.add_argument('-c', dest='command', required=True)
+	parser.add_argument('-i', dest='iterations', required=False)
+	args = parser.parse_args()
+	if args.command:
+		command = str(args.command)
+	if args.iterations:
+		iterations = int(args.iterations)
+	else:
+		iterations = 1
+	
 	while(count <= iterations):
 		startTime = time()
 		callBashCommand(command)
@@ -37,6 +51,7 @@ def main():
 	print("Average is " + str(average) + " after " + str(count-1) + " iterations")
 
 
+#calls main method
 if __name__ == '__main__':
 	main()
 
